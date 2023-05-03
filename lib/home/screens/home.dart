@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todos/data/model/todos_model.dart';
 import 'package:todos/home/bloc/home_bloc.dart';
+import 'package:todos/home/widgets/custom_tab_bar.dart';
 import 'package:todos/home/widgets/custom_textfield.dart';
 
 class Home extends StatefulWidget {
@@ -13,9 +15,12 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   final TextEditingController controller = TextEditingController();
 
+  late TabController tabController;
+
   @override
   void initState() {
     super.initState();
+    tabController = TabController(length: 3, vsync: this);
     controller.addListener(() {
       setState(() {});
     });
@@ -45,13 +50,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           .read<HomeBloc>()
                           .add(AddTodo(newTodo: controller.text));
 
-                      setState(() {});
+                      setState(() {
+                        controller.clear();
+                      });
                     }
                   : null,
             ),
-          ),
-          const Divider(
-            thickness: 2,
           ),
           BlocBuilder<HomeBloc, HomeState>(
             builder: (context, state) {
@@ -63,20 +67,45 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   child: Text("Something went wrong"),
                 );
               }
-              return Expanded(
-                child: ListView.builder(
-                  itemCount: state.todos.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text('$index'),
-                      subtitle: Text(state.todos[index].title ?? ''),
-                    );
-                  },
-                ),
+              return CustomTabBar(
+                state: state,
+                tabController: tabController,
+                children: [
+                  CustomListView(todos: state.todos),
+                  CustomListView(todos: state.completedTodos),
+                  CustomListView(todos: state.sortedTodos),
+                ],
               );
             },
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CustomListView extends StatelessWidget {
+  const CustomListView({
+    super.key,
+    required this.todos,
+  });
+
+  final List<TodosModel> todos;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+          itemCount: todos.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text('${index + 1}'),
+              subtitle: Text(todos[index].title ?? ''),
+            );
+          },
+        ),
       ),
     );
   }
