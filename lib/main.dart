@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todos/home/bloc/home_bloc.dart';
-import 'package:todos/home/home.dart';
+import 'package:todos/home/screens/home.dart';
 
 void main() {
   runApp(const MyApp());
