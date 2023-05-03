@@ -94,18 +94,16 @@ class CustomListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView.builder(
-          itemCount: todos.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text('${index + 1}'),
-              subtitle: Text(todos[index].title ?? ''),
-            );
-          },
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListView.builder(
+        itemCount: todos.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text('${index + 1}'),
+            subtitle: Text(todos[index].title ?? ''),
+          );
+        },
       ),
     );
   }
