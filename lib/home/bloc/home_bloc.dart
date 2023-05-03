@@ -63,7 +63,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   /// return sorted todos by title
   List<TodosModel> sortedByTitle(List<TodosModel> todos) {
-    final sortedTodos = todos;
+    final sortedTodos = [...todos];
     sortedTodos.sort((a, b) => a.title!.compareTo(b.title!));
     return sortedTodos;
   }
