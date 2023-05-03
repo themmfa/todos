@@ -27,3 +27,14 @@ class DeleteTodo extends HomeEvent {
 
   final int index;
 }
+
+class EditTodo extends HomeEvent {
+  const EditTodo({
+    required this.editedTodo,
+    required this.index,
+  });
+
+  final String editedTodo;
+
+  final int index;
+}

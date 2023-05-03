@@ -12,6 +12,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeInit>(_onHomeInit);
     on<AddTodo>(_onAddTodo);
     on<DeleteTodo>(_onDeleteTodo);
+    on<EditTodo>(_onEditTodo);
   }
 
   Future<void> _onHomeInit(
@@ -57,6 +58,27 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) async {
     state.todos.removeAt(event.index);
+
+    emit(state.copyWith(
+      todos: state.todos,
+      completedTodos: completedTodos(state.todos),
+      sortedTodos: sortedByTitle(state.todos),
+    ));
+  }
+
+  Future<void> _onEditTodo(
+    EditTodo event,
+    Emitter<HomeState> emit,
+  ) async {
+    final index = event.index;
+    final text = event.editedTodo;
+
+    state.todos.firstWhere((element) {
+      if (element.id == index) {
+        state.todos[index].title = text;
+      }
+      return element.id == index;
+    });
 
     emit(state.copyWith(
       todos: state.todos,
