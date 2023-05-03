@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:todos/data/model/todos_model.dart';
 import 'package:todos/data/repository/todos_repository.dart';
+import 'package:todos/home/utils/utils.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -48,23 +49,5 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       completedTodos: completedTodos(state.todos),
       sortedTodos: sortedByTitle(state.todos),
     ));
-  }
-
-  /// return completed todos
-  List<TodosModel> completedTodos(List<TodosModel> todos) {
-    final completed = <TodosModel>[];
-    for (var todo in todos) {
-      if (todo.completed == true) {
-        completed.add(todo);
-      }
-    }
-    return completed;
-  }
-
-  /// return sorted todos by title
-  List<TodosModel> sortedByTitle(List<TodosModel> todos) {
-    final sortedTodos = [...todos];
-    sortedTodos.sort((a, b) => a.title!.compareTo(b.title!));
-    return sortedTodos;
   }
 }
