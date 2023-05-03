@@ -85,9 +85,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   ),
                   CustomListView(
                     todos: state.completedTodos,
+                    dialogTextEditingController: dialogTextEditingController,
                   ),
                   CustomListView(
                     todos: state.sortedTodos,
+                    dialogTextEditingController: dialogTextEditingController,
                   ),
                 ],
               );
@@ -134,7 +136,7 @@ class CustomListView extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               child: Row(
                 children: [
-                  Text('${todos[index].id}'),
+                  Text('$index'),
                   const SizedBox(
                     width: 10,
                   ),
@@ -166,8 +168,9 @@ class CustomListView extends StatelessWidget {
                                         index: index,
                                       ));
                                   Navigator.pop(
-                                    ctx,
+                                    context,
                                   );
+                                  dialogTextEditingController!.clear();
                                 },
                               ),
                             ],
@@ -186,16 +189,6 @@ class CustomListView extends StatelessWidget {
               ),
             ),
           );
-          // return ListTile(
-          //   title: Text('${index + 1}'),
-          //   subtitle: Text(todos[index].title ?? ''),
-          //   trailing: IconButton(
-          //     onPressed: () {
-          //       context.read<HomeBloc>().add(DeleteTodo(index: index));
-          //     },
-          //     icon: const Icon(Icons.delete),
-          //   ),
-          // );
         },
       ),
     );

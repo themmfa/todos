@@ -73,12 +73,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final index = event.index;
     final text = event.editedTodo;
 
-    state.todos.firstWhere((element) {
-      if (element.id == index) {
-        state.todos[index].title = text;
-      }
-      return element.id == index;
-    });
+    state.todos[index].title = text;
 
     emit(state.copyWith(
       todos: state.todos,
