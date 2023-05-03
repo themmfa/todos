@@ -106,16 +106,56 @@ class CustomListView extends StatelessWidget {
       child: ListView.builder(
         itemCount: todos.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text('${index + 1}'),
-            subtitle: Text(todos[index].title ?? ''),
-            trailing: IconButton(
-              onPressed: () {
-                context.read<HomeBloc>().add(DeleteTodo(index: index));
-              },
-              icon: const Icon(Icons.delete),
+          return Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  Text('${todos[index].id}'),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(child: Text('${todos[index].title}')),
+                  IconButton(
+                    onPressed: () {
+                      context.read<HomeBloc>().add(DeleteTodo(index: index));
+                    },
+                    icon: const Icon(Icons.delete),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.edit),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.done),
+                  ),
+                ],
+              ),
             ),
           );
+          // return ListTile(
+          //   title: Text('${index + 1}'),
+          //   subtitle: Text(todos[index].title ?? ''),
+          //   trailing: IconButton(
+          //     onPressed: () {
+          //       context.read<HomeBloc>().add(DeleteTodo(index: index));
+          //     },
+          //     icon: const Icon(Icons.delete),
+          //   ),
+          // );
         },
       ),
     );
