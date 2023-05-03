@@ -9,6 +9,7 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(const HomeState()) {
     on<HomeInit>(_onHomeInit);
+    on<AddTodo>(_onAddTodo);
   }
 
   Future<void> _onHomeInit(
@@ -25,10 +26,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
       emit(state.copyWith(
         todos: todosList,
+        fetchingState: FetchTodosState.completed,
       ));
     } catch (e) {
-      // TODO(ferdogan): add error handling
-      print(e);
+      emit(state.copyWith(
+        fetchingState: FetchTodosState.error,
+      ));
     }
+  }
+
+  Future<void> _onAddTodo(
+    AddTodo event,
+    Emitter<HomeState> emit,
+  ) async {
+    final newTodo = TodosModel(title: event.newTodo, completed: false);
+    state.todos.insert(0, newTodo);
+    emit(state.copyWith(
+      todos: state.todos,
+    ));
   }
 }
