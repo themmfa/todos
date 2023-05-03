@@ -26,6 +26,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
       emit(state.copyWith(
         todos: todosList,
+        completedTodos: completedTodos(todosList),
+        sortedTodos: sortedByTitle(todosList),
         fetchingState: FetchTodosState.completed,
       ));
     } catch (e) {
@@ -43,6 +45,26 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     state.todos.insert(0, newTodo);
     emit(state.copyWith(
       todos: state.todos,
+      completedTodos: completedTodos(state.todos),
+      sortedTodos: sortedByTitle(state.todos),
     ));
+  }
+
+  /// return completed todos
+  List<TodosModel> completedTodos(List<TodosModel> todos) {
+    final completed = <TodosModel>[];
+    for (var todo in todos) {
+      if (todo.completed == true) {
+        completed.add(todo);
+      }
+    }
+    return completed;
+  }
+
+  /// return sorted todos by title
+  List<TodosModel> sortedByTitle(List<TodosModel> todos) {
+    final sortedTodos = todos;
+    sortedTodos.sort((a, b) => a.title!.compareTo(b.title!));
+    return sortedTodos;
   }
 }
