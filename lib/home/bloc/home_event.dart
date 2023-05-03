@@ -38,3 +38,11 @@ class EditTodo extends HomeEvent {
 
   final int index;
 }
+
+class MarkAsComplete extends HomeEvent {
+  const MarkAsComplete({
+    required this.index,
+  });
+
+  final int index;
+}

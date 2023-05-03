@@ -13,6 +13,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<AddTodo>(_onAddTodo);
     on<DeleteTodo>(_onDeleteTodo);
     on<EditTodo>(_onEditTodo);
+    on<MarkAsComplete>(_onMarkAsComplete);
   }
 
   Future<void> _onHomeInit(
@@ -79,6 +80,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       todos: state.todos,
       completedTodos: completedTodos(state.todos),
       sortedTodos: sortedByTitle(state.todos),
+    ));
+  }
+
+  Future<void> _onMarkAsComplete(
+    MarkAsComplete event,
+    Emitter<HomeState> emit,
+  ) async {
+    state.todos[event.index].completed = true;
+
+    emit(state.copyWith(
+      todos: state.todos,
+      completedTodos: completedTodos(state.todos),
     ));
   }
 }

@@ -182,7 +182,11 @@ class CustomListView extends StatelessWidget {
                   ),
                   if (todos[index].completed != true)
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        context
+                            .read<HomeBloc>()
+                            .add(MarkAsComplete(index: index));
+                      },
                       icon: const Icon(Icons.done),
                     ),
                 ],
