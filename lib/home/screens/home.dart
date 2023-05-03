@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 import 'package:todos/data/model/todos_model.dart';
 import 'package:todos/home/bloc/home_bloc.dart';
 import 'package:todos/home/widgets/custom_tab_bar.dart';
@@ -71,9 +72,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 state: state,
                 tabController: tabController,
                 children: [
-                  CustomListView(todos: state.todos),
-                  CustomListView(todos: state.completedTodos),
-                  CustomListView(todos: state.sortedTodos),
+                  CustomListView(
+                    todos: state.todos,
+                  ),
+                  CustomListView(
+                    todos: state.completedTodos,
+                  ),
+                  CustomListView(
+                    todos: state.sortedTodos,
+                  ),
                 ],
               );
             },
@@ -102,6 +109,12 @@ class CustomListView extends StatelessWidget {
           return ListTile(
             title: Text('${index + 1}'),
             subtitle: Text(todos[index].title ?? ''),
+            trailing: IconButton(
+              onPressed: () {
+                context.read<HomeBloc>().add(DeleteTodo(index: index));
+              },
+              icon: const Icon(Icons.delete),
+            ),
           );
         },
       ),
