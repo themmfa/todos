@@ -9,7 +9,11 @@ class TodosApi {
     final response = await http.get(Uri.parse(ApiConstants.url));
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      List<Map<String, dynamic>> dataList = (json.decode(response.body) as List)
+          .map((item) => item as Map<String, dynamic>)
+          .toList();
+
+      return dataList;
     } else {
       throw Exception('Failed to load todos');
     }
