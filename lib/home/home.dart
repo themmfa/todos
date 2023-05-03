@@ -3,14 +3,32 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todos/home/bloc/home_bloc.dart';
 import 'package:todos/home/widgets/custom_textfield.dart';
 
-class Home extends StatelessWidget {
-  Home({super.key});
+class Home extends StatefulWidget {
+  const Home({super.key});
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   final TextEditingController controller = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    controller.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    context.read<HomeBloc>().add(const HomeInit());
     return Scaffold(
       appBar: AppBar(
         title: const Text("TODOS"),
@@ -21,7 +39,15 @@ class Home extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             child: _AddTodo(
               controller: controller,
-              onPressed: controller.text != '' ? () {} : null,
+              onPressed: controller.text != ''
+                  ? () {
+                      context
+                          .read<HomeBloc>()
+                          .add(AddTodo(newTodo: controller.text));
+
+                      setState(() {});
+                    }
+                  : null,
             ),
           ),
           const Divider(
@@ -29,20 +55,27 @@ class Home extends StatelessWidget {
           ),
           BlocBuilder<HomeBloc, HomeState>(
             builder: (context, state) {
-              final todos = state.todos;
+              if (state.fetchingState == FetchTodosState.progress) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (state.fetchingState == FetchTodosState.error) {
+                return const Center(
+                  child: Text("Something went wrong"),
+                );
+              }
               return Expanded(
                 child: ListView.builder(
-                  itemCount: todos.length,
+                  itemCount: state.todos.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      title: Text('${state.todos[index].id}'),
+                      title: Text('$index'),
                       subtitle: Text(state.todos[index].title ?? ''),
                     );
                   },
                 ),
               );
             },
-          )
+          ),
         ],
       ),
     );
