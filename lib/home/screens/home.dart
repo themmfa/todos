@@ -64,7 +64,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               }
               if (state.fetchingState == FetchTodosState.error) {
                 return const Center(
-                  child: Text("Something went wrong"),
+                  child: Text("Something went wrong while fetching the data"),
                 );
               }
               return CustomTabBar(
