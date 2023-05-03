@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/rendering.dart';
 import 'package:todos/data/model/todos_model.dart';
 import 'package:todos/data/repository/todos_repository.dart';
 import 'package:todos/home/utils/utils.dart';
@@ -11,6 +12,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(const HomeState()) {
     on<HomeInit>(_onHomeInit);
     on<AddTodo>(_onAddTodo);
+    on<DeleteTodo>(_onDeleteTodo);
   }
 
   Future<void> _onHomeInit(
@@ -44,6 +46,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     final newTodo = TodosModel(title: event.newTodo, completed: false);
     state.todos.insert(0, newTodo);
+    emit(state.copyWith(
+      todos: state.todos,
+      completedTodos: completedTodos(state.todos),
+      sortedTodos: sortedByTitle(state.todos),
+    ));
+  }
+
+  Future<void> _onDeleteTodo(
+    DeleteTodo event,
+    Emitter<HomeState> emit,
+  ) async {
+    state.todos.removeAt(event.index);
+
     emit(state.copyWith(
       todos: state.todos,
       completedTodos: completedTodos(state.todos),

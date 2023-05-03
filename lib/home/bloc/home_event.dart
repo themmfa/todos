@@ -19,3 +19,11 @@ class AddTodo extends HomeEvent {
   /// New todo text
   final String newTodo;
 }
+
+class DeleteTodo extends HomeEvent {
+  const DeleteTodo({
+    required this.index,
+  });
+
+  final int index;
+}
