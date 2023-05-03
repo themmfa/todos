@@ -1,16 +1,14 @@
 # todos
 
-A new Flutter project.
+todos app fetch todos from ```https://jsonplaceholder.typicode.com/todos``` and shows them in list. 
+- User can add new todos to list.
+- User can see completed and sorted todos by title.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+- Clone the project to your pc.
+- Open the project using your favorite IDE(preferably VS Code).
+- Open your Android emulator or iOS simulator.
+- In project folder, run ``` flutter run ``` command.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
