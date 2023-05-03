@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
 import 'package:todos/data/model/todos_model.dart';
 import 'package:todos/home/bloc/home_bloc.dart';
+import 'package:todos/home/widgets/custom_edit_dialog.dart';
 import 'package:todos/home/widgets/custom_tab_bar.dart';
 import 'package:todos/home/widgets/custom_textfield.dart';
 
@@ -16,6 +16,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   final TextEditingController controller = TextEditingController();
 
+  final TextEditingController dialogTextEditingController =
+      TextEditingController();
+
   late TabController tabController;
 
   @override
@@ -25,11 +28,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     controller.addListener(() {
       setState(() {});
     });
+
+    dialogTextEditingController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
   void dispose() {
     controller.dispose();
+    dialogTextEditingController.dispose();
     super.dispose();
   }
 
@@ -74,6 +82,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 children: [
                   CustomListView(
                     todos: state.todos,
+                    dialogTextEditingController: dialogTextEditingController,
                   ),
                   CustomListView(
                     todos: state.completedTodos,
@@ -95,9 +104,12 @@ class CustomListView extends StatelessWidget {
   const CustomListView({
     super.key,
     required this.todos,
+    this.dialogTextEditingController,
   });
 
   final List<TodosModel> todos;
+
+  final TextEditingController? dialogTextEditingController;
 
   @override
   Widget build(BuildContext context) {
@@ -135,13 +147,42 @@ class CustomListView extends StatelessWidget {
                     icon: const Icon(Icons.delete),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (ctx) {
+                          return AlertDialog(
+                            title: const Text('Edit'),
+                            content: CustomTextField(
+                              hintText: 'Edit your todo',
+                              controller: dialogTextEditingController!,
+                            ),
+                            actions: [
+                              ElevatedButton(
+                                child: const Text('Edit'),
+                                onPressed: () {
+                                  context.read<HomeBloc>().add(EditTodo(
+                                        editedTodo:
+                                            dialogTextEditingController!.text,
+                                        index: index,
+                                      ));
+                                  Navigator.pop(
+                                    ctx,
+                                  );
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
                     icon: const Icon(Icons.edit),
                   ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.done),
-                  ),
+                  if (todos[index].completed != true)
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.done),
+                    ),
                 ],
               ),
             ),
