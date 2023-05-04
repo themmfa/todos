@@ -3,6 +3,7 @@
 todos app fetch todos from ```https://jsonplaceholder.typicode.com/todos``` and shows them in list. 
 - User can add new todos to list.
 - User can see completed and sorted todos by title.
+- App uses BLOC as state management library.
 
 ## Getting Started
 
